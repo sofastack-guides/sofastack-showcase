@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="showcase">  
+	
+	<insert id="addTradeDetail" parameterType="TradeDetail">
+		insert into trade_detail(stream_id,custac_out,custac_in,amount,trade_status,trade_date)
+		values(#{streamId},#{custacOut},#{custacIn},#{amount},#{tradeStatus},#{tradeDate})
+	</insert>
+
+	<update id="updateTradeDetail" parameterType="TradeDetail">
+		update trade_detail
+		set trade_status=#{tradeStatus}
+		where stream_id=#{streamId}
+	</update>
+
+	<select id="getTradeDetail" resultType="TradeDetail">
+		select stream_id,custac_out,custac_in,amount,trade_date,trade_status from trade_detail where stream_id=#{streamId}
+	</select>
+
+	<delete id="deleteAllTradeDetail" >
+		delete from trade_detail
+	</delete>
+
+	<select id="getSequenceId" resultType="int">
+		SELECT trade_seq.nextval FROM dual WHERE sharding_col = #{shardingCol}
+	</select>
+	
+
+</mapper>

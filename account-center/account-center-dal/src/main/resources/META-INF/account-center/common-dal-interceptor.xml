@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<!-- 摘要日志拦截器 -->
+	<bean id="dalDigestAutoProxyCreator"
+		  class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<value>dalDigestLogInterceptor</value>
+			</list>
+		</property>
+		<property name="beanNames">
+			<value>*DAO</value>
+		</property>
+	</bean>
+
+	<bean id="dalDigestLogInterceptor"
+		  class="com.aliyun.gts.financial.showcases.sofa.interceptor.DalDigestLogInterceptor" />
+
+
+</beans>

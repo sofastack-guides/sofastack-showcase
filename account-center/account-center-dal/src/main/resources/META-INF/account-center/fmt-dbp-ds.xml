@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="GBK" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sofa="http://schema.alipay.com/sofa/schema/slite" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName">
+
+  <!-- dbp configuration -->
+  <bean id="account_ds_fmt" class="com.alipay.sofa.dbp.DbpDataSource" init-method="init">
+    <property name="delegate" ref="accDataSource" />
+    <property name="appName" value="account-center" />
+    <property name="database"> <value>${dbp_db_name}</value> </property>
+    <property name="dbpInstanceId"> <value>${dbp_instance_id}</value> </property>
+    <property name="clientTracer" ref="clientTracer" />
+    <!-- 需要配合dtx的fmt模式，注意：该模式一方化不支持 -->
+    <!-- <property name="dataSourceInterceptors">
+      <list>
+        <ref bean="dtxSupportInterceptor" />
+      </list>
+    </property> -->
+  </bean>
+
+  <!-- <bean id="dtxSupportInterceptor" class="com.alipay.sofa.dbp.dtx.DtxSupportInterceptor" /> -->
+
+  <!-- <bean id="accFmtDataSource" class="com.alipay.sofa.dtx.datasource.WrappedDtxDataSource">
+    <property name="targetDataSource" ref="accDataSource" />
+    <property name="uniqueDbId" value="account_db_fmt" />
+    <property name="dbType" value="MySQL" />
+  </bean> -->
+
+  <bean id="account_datasource_sqlSessionFactory_fmt" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="account_ds_fmt" />
+    <property name="configLocation" value="classpath:sqlmap/sqlMapConfig.xml" />
+  </bean>
+
+  <bean id="account_sqlSession_fmt" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg index="0" ref="account_datasource_sqlSessionFactory_fmt" />
+  </bean>
+
+  <bean id="account_TransactionManager_fmt" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="account_ds_fmt" />
+  </bean>
+
+  <bean id="accountTransactionTemplateFmt" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="propagationBehaviorName">
+      <value>PROPAGATION_REQUIRES_NEW</value>
+    </property>
+    <property name="transactionManager">
+      <ref bean="account_TransactionManager_fmt" />
+    </property>
+  </bean>
+
+  <bean id="account_SqlMapClientDAO_fmt" abstract="true">
+    <property name="sqlSession">
+      <ref bean="account_sqlSession_fmt" />
+    </property>
+  </bean>
+
+
+</beans>

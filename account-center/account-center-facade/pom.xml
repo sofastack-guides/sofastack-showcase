@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+        <artifactId>account-center-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>account-center-facade</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>dtx-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

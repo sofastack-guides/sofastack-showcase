@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>  
+	
+	<settings>  
+        <setting name="mapUnderscoreToCamelCase" value="true" />  
+    </settings>  
+    
+	<typeAliases>
+		<typeAlias alias="accountPoint" type="com.aliyun.gts.financial.showcases.sofa.facade.model.AccountPoint"/>
+		<typeAlias alias="pointRecord" type="com.aliyun.gts.financial.showcases.sofa.facade.model.PointRecord"/>
+ 	</typeAliases>
+  	
+  	<mappers>  
+		  <mapper resource="sqlmap/account-point.xml" />  
+		  <mapper resource="sqlmap/point-record.xml" />  
+    </mappers>
+    
+</configuration>  

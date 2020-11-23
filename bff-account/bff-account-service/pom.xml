@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+        <artifactId>bff-account-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>bff-account-service</artifactId>
+
+    <dependencies>
+        <!-- facade dependency -->
+        <dependency>
+            <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+            <artifactId>bff-account-facade</artifactId>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+            <artifactId>point-center-facade</artifactId>
+            <version>1.0.0</version>
+        </dependency> -->
+
+        <!-- RPC演示：引入RPC依赖starter，同时支持Bolt和REST协议 -->
+        <!-- RPC -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 分布式事务DTX -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>dtx-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 动态配置DRM -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>ddcs-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 限流 -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>guardian-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>tracer-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofamq-client-all</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <!-- dal -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>dbp-connector-java</artifactId>
+        </dependency>
+
+        <!-- spring boot and spring dependencies begin-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!-- logback -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- spring dependencies end -->
+
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <!-- http://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <!-- http://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html -->
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
+                <configuration>
+                    <!-- executable fat jar -->
+                    <outputDirectory>../target</outputDirectory>
+                    <classifier>executable</classifier>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>${docker.hub.registry}/${docker.hub.project}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>./target/${project.artifactId}-${project.version}.jar</JAR_FILE>
+                    </buildArgs>
+                    <buildDirectory>./</buildDirectory>
+                    <contextDirectory>./</contextDirectory>
+                </configuration>
+            </plugin> -->
+        </plugins>
+    </build>
+
+
+
+
+</project>

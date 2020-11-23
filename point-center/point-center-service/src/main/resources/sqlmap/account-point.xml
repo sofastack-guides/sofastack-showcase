@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="showcase">  
+	
+	<select id="getAccountPoint" resultType="accountPoint">
+		select * from account_point where account_no=#{accountNo} for update
+	</select>
+	
+	<insert id="addAccountPoint" parameterType="accountPoint">
+		insert into account_point(account_no,point,status) values(#{accountNo},#{point},#{status})
+	</insert>
+	
+	<delete id="deleteAccountPoint" >
+		delete from account_point where account_no=#{accountNo}
+	</delete>
+	
+	<delete id="deleteAllAccountPoint" >
+		delete from account_point
+	</delete>
+	
+	<delete id="updateAccountPoint" parameterType="accountPoint" >
+		update account_point 
+		set status = #{status}
+		<if test="point != null">
+			,point = #{point}
+		</if>
+		where account_no=#{accountNo}
+	</delete>
+
+</mapper>

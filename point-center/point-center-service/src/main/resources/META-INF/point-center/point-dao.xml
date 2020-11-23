@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="GBK" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sofa="http://schema.alipay.com/sofa/schema/slite" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName">
+
+
+    <bean id="accountPointDAO" class="com.aliyun.gts.financial.showcases.sofa.dao.AccountPointDAOImpl" parent="account_point_SqlMapClientDAO" />
+    <bean id="pointRecordDAO" class="com.aliyun.gts.financial.showcases.sofa.dao.PointRecordDAOImpl" parent="account_point_SqlMapClientDAO" />
+
+    <!-- dbp configuration -->
+    <bean id="account_point_ds" class="com.alipay.sofa.dbp.DbpDataSource" init-method="init">
+        <property name="delegate" ref="apDataSource" />
+        <property name="appName" value="account-center" />
+        <property name="database">
+            <value>${dbp_db_name}</value>
+        </property>
+        <property name="dbpInstanceId">
+            <value>${dbp_instance_id}</value>
+        </property>
+        <property name="clientTracer" ref="clientTracer" />
+    </bean>
+
+    <bean id="clientTracer" class="com.alipay.sofa.dbp.DbpClientTracer">
+        <property name="sampleThreshold" value="0" />
+    </bean>
+
+    <!-- init-method="init" -->
+    <bean id="apDataSource" name="apDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url">
+            <value>${account_point_db_url}</value>
+        </property>
+        <property name="username">
+            <value>${account_point_db_username}</value>
+        </property>
+        <property name="password">
+            <value>${account_point_db_password}</value>
+        </property>
+        <property name="filters" value="stat,slf4j" />
+        <property name="maxActive" value="20" />
+        <property name="minIdle" value="1" />
+        <property name="initialSize" value="1" />
+        <property name="maxWait" value="60000" />
+        <!-- 2分钟检测一次，单个链接默认超时时间为30分钟 -->
+        <property name="timeBetweenEvictionRunsMillis" value="120000" />
+        <!-- 每次检测除了客户端超时时间外，再额外检测一次链接可用性，因为有可能DB会重启，客户端30分钟超时不够用 -->
+        <property name="testWhileIdle" value="true" />
+        <!-- 检测SQL -->
+        <property name="validationQuery" value="select 1" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <!-- <property name="poolPreparedStatements" value="true" />
+    <property name="maxOpenPreparedStatements" value="20" /> -->
+        <property name="connectionProperties" value="useUnicode=true;characterEncoding=utf8;socketTimeout=5000;connectTimeout=500;useLocalSessionState=true;rewriteBatchedStatements=true;allowMultiQueries=true" />
+    </bean>
+
+    <bean id="account_point_action_datasource_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="account_point_ds" />
+        <property name="configLocation" value="classpath:sqlmap/sqlMapConfig.xml" />
+    </bean>
+
+    <bean id="account_point_action_sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="account_point_action_datasource_sqlSessionFactory" />
+    </bean>
+
+    <bean id="account_point_SqlMapClientDAO" abstract="true">
+        <property name="sqlSession">
+            <ref bean="account_point_action_sqlSession" />
+        </property>
+    </bean>
+
+    <!-- 事务模板管理器 -->
+    <bean id="apTransactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="account_point_ds"/>
+    </bean>
+
+    <!-- 事务模板 -->
+    <bean id="apTransactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="apTransactionManager"/>
+    </bean>
+
+</beans>

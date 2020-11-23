@@ -1,0 +1,14 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sofa="http://schema.alipay.com/sofa/schema/slite" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="pointReturnTccService" class="com.aliyun.gts.financial.showcases.sofa.tcc.PointReturnTccServiceImpl" />
+
+    <bean id="pointQueryService" class="com.aliyun.gts.financial.showcases.sofa.api.PointQueryServiceImpl" />
+
+    <!-- 动态配置演示：bean定义 -->
+    <bean id="pointConfig" class="com.aliyun.gts.financial.showcases.sofa.dynamic.PointConfig" init-method="init"/>
+    
+    <bean class="com.alipay.sofa.dtx.client.aop.ComponentScanner" />
+
+</beans>

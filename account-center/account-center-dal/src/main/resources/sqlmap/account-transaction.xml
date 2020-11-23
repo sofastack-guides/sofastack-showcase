@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dtx">
+
+	<select id="getAccountTransaction" parameterType="map" resultType="accountTransaction">
+		select * from account_transaction where tx_id=#{txId} and sharding_key=#{shardingKey}
+	</select>
+
+	<insert id="addAccountTransaction" parameterType="accountTransaction">
+		insert into account_transaction(tx_id,account_no,amount,operation,status,sharding_key)
+		values(#{txId},#{accountNo},#{amount},#{operation},#{status},#{shardingKey})
+	</insert>
+
+	<update id="updateAccountTransactionStatus" parameterType="accountTransaction">
+		update account_transaction
+		set status=#{status}
+		where tx_id=#{txId} and sharding_key=#{shardingKey}
+	</update>
+
+	<delete id="deleteAccountTransaction" parameterType="accountTransaction">
+		delete from account_transaction where tx_id =#{txId} and sharding_key=#{shardingKey}
+	</delete>
+
+	<delete id="deleteAllTransaction">
+		delete from account_transaction
+	</delete>
+
+</mapper>

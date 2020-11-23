@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.alipay.sofa</groupId>
+        <artifactId>sofaboot-enterprise-dependencies</artifactId>
+        <version>3.4.6</version>
+    </parent>
+
+    <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+    <artifactId>account-center-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.version>1.0.0</project.version>
+        <docker.hub.registry>registry.cn-shanghai.aliyuncs.com</docker.hub.registry>
+        <docker.hub.project>showcase</docker.hub.project>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+                <artifactId>account-center-facade</artifactId>
+                <!-- project version -->
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+                <artifactId>account-center-service</artifactId>
+                <!-- project version -->
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+                <artifactId>account-center-dal</artifactId>
+                <!-- project version -->
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>dtx-enterprise-sofa-boot-starter</artifactId>
+            </dependency> -->
+
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>1.1.10</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.40</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>dbp-connector-java</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Tests.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/Abstract*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>${docker.hub.registry}/${docker.hub.project}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>./target/${project.artifactId}-${project.version}.jar</JAR_FILE>
+                    </buildArgs>
+                    <buildDirectory>./</buildDirectory>
+                    <contextDirectory>./</contextDirectory>
+                </configuration>
+            </plugin> -->
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>antcloudrelease</id>
+                    <name>Ant Cloud</name>
+                    <url>http://mvn.cloud.alipay.com/nexus/content/groups/open</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>antcloudrelease</id>
+                    <name>Ant Cloud</name>
+                    <url>http://mvn.cloud.alipay.com/nexus/content/groups/open</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+    <modules>
+        <module>account-center-facade</module>
+        <module>account-center-service</module>
+        <module>account-center-dal</module>
+    </modules>
+</project>

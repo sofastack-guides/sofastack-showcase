@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+        <artifactId>account-center-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>account-center-service</artifactId>
+
+    <dependencies>
+        <!-- facade dependency -->
+        <!-- <dependency>
+            <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+            <artifactId>account-center-facade</artifactId>
+        </dependency> -->
+        <dependency>
+            <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>
+            <artifactId>account-center-dal</artifactId>
+        </dependency>
+
+        <!-- RPC演示：引入RPC依赖通过starter -->
+        <!-- sofa rpc dependency -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- DRM演示：引入DRM依赖通过starter -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>ddcs-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 限流演示：引入限流依赖通过starter -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>guardian-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 任务调度演示：引入任务调度依赖通过starter -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>scheduler-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 链路追踪演示：引入链路追踪依赖通过starter -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>tracer-enterprise-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <!-- <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>dtx-enterprise-sofa-boot-starter</artifactId>
+        </dependency> -->
+
+        <!-- spring boot and spring dependencies begin-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!-- logback -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- spring dependencies end -->
+
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <!-- http://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <!-- http://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html -->
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
+                <configuration>
+                    <!-- executable fat jar -->
+                    <outputDirectory>../target</outputDirectory>
+                    <classifier>executable</classifier>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            
+        </plugins>
+    </build>
+
+
+
+
+</project>

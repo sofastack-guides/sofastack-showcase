@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="showcase">
+
+	<select id="getAccount" resultType="account">
+		select * from account where account_no=#{value}
+	</select>
+
+	<select id="getAccountForUpdate" resultType="account">
+		select * from account where account_no=#{value} for update
+	</select>
+
+	<insert id="addAccount" parameterType="account">
+		insert into account(account_no,balance,freeze_amount,unreach_amount) values(#{accountNo},#{balance},#{freezeAmount},#{unreachAmount})
+	</insert>
+
+	<update id="updateBalance" parameterType="account">
+		update account set balance=#{balance} where account_no=#{accountNo}
+	</update>
+
+	<update id="updateFreezeAmount" parameterType="account">
+		update account set freeze_amount=#{freezeAmount} where account_no=#{accountNo}
+	</update>
+
+	<update id="updateUnreachAmount" parameterType="account">
+		update account set unreach_amount=#{unreachAmount} where account_no=#{accountNo}
+	</update>
+
+	<delete id="deleteAccount">
+		delete from account
+	</delete>
+
+	<!-- DBP演示：hint语句写在xml中 -->
+	<select id="getAccountByRange" parameterType="map" resultType="account">
+		/*+DBP: $ROUTE={GROUP_ID(${shard}),TABLE_NAME(account_${shard})}*/ 
+		select * from account where id <![CDATA[>=]]> #{start} and id <![CDATA[<=]]> #{end}
+	</select>
+
+	<!-- DBP演示：hint语句由拦截器添加 -->
+	<select id="queryMaxId" resultType="java.lang.Integer">
+		select max(id) from account
+    </select>
+
+	<insert id="batchInsertAccounts" parameterType="java.util.List" useGeneratedKeys="true">
+		<!-- <selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey> -->
+		insert into account(account_no,balance,freeze_amount,unreach_amount) values
+		<foreach collection="list" item="model" index="index" separator=","> 
+		   (#{model.accountNo}, #{model.balance}, #{model.freezeAmount}, #{model.unreachAmount})
+		</foreach>
+	 </insert>
+	 
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="GBK" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sofa="http://schema.alipay.com/sofa/schema/slite" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName">
+
+  <!-- dbp configuration -->
+  <bean id="account_ds" class="com.alipay.sofa.dbp.DbpDataSource" init-method="init">
+    <property name="delegate" ref="accDataSource" />
+    <property name="appName" value="account-center" />
+    <property name="database"> <value>${dbp_db_name}</value> </property>
+    <property name="dbpInstanceId"> <value>${dbp_instance_id}</value> </property>
+    <property name="clientTracer" ref="clientTracer" />
+  </bean>
+
+  <bean id="clientTracer" class="com.alipay.sofa.dbp.DbpClientTracer">
+    <!-- 此配置代表只有超过指定耗时阈值的请求才会被记录 -->
+    <property name="sampleThreshold" value="0"/>
+  </bean>
+
+  <bean id="account_datasource_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="account_ds" />
+    <property name="configLocation" value="classpath:sqlmap/sqlMapConfig.xml" />
+  </bean>
+
+  <bean id="account_sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg index="0" ref="account_datasource_sqlSessionFactory" />
+  </bean>
+
+  <bean id="account_TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="account_ds" />
+  </bean>
+
+  <bean id="accountTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="propagationBehaviorName">
+      <value>PROPAGATION_REQUIRES_NEW</value>
+    </property>
+    <property name="transactionManager">
+      <ref bean="account_TransactionManager" />
+    </property>
+  </bean>
+
+  <bean id="account_SqlMapClientDAO" abstract="true">
+    <property name="sqlSession">
+      <ref bean="account_sqlSession" />
+    </property>
+  </bean>
+
+  <bean class="com.alipay.sofa.dtx.tcc.dao.mybatis.MybatisTccAntiSuspendDAO" >
+    <property name="dataSource" ref="account_ds" />
+  </bean>
+
+</beans>

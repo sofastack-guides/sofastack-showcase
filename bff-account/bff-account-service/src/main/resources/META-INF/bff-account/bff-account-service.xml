@@ -1,0 +1,51 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sofa="http://schema.alipay.com/sofa/schema/slite" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="accountRestService" class="com.aliyun.gts.financial.showcases.sofa.rest.AccountRestServiceImpl" />
+
+    <bean id="accountBoltService" class="com.aliyun.gts.financial.showcases.sofa.bolt.AccountBoltServiceImpl" />
+
+    <bean id="accountTransferService" class="com.aliyun.gts.financial.showcases.sofa.inner.AccountTransferServiceImpl" />
+
+    <!-- 泛化调用演示：客户端服务引用声明，接口为固定的com.alipay.sofa.rpc.api.GenericService，实际接口通过global-attrs中设定 -->
+    <sofa:reference interface="com.alipay.sofa.rpc.api.GenericService" id="pointGenericService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs generic-interface="com.aliyun.gts.financial.showcases.sofa.facade.api.PointQueryService" />
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <!-- XML配置演示 -->
+    <!-- <sofa:reference id="accountQueryService" interface="com.aliyun.gts.financial.showcases.sofa.facade.api.AccountQueryService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs timeout="6000" address-wait-time="2000" test-url="101.101.0.8:12200" loadBalancer="roundRobin" /> 
+            <sofa:route target-url="172.168.0.8:22000"/>  
+            <sofa:method name="queryAccount" timeout="10000"/> 
+        </sofa:binding.bolt>
+    </sofa:reference> -->
+
+    <bean class="com.alipay.sofa.dtx.client.aop.ComponentScanner" />
+
+    <bean id="dtxService" class="com.alipay.dtx.client.core.api.impl.DtxServiceImpl" />
+
+    <!-- 限流：AOP拦截器用于非RPC接口和Spring MVC web请求场景，比如普通的bean -->
+    <!-- 引入 guardian 中定义的 bean -->
+    <import resource="classpath:META-INF/spring/guardian-sofalite.xml" />
+    <!-- 配置 AOP 拦截器 -->
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="interceptorNames">
+            <list>
+                <value>guardianExtendInterceptor</value>
+            </list>
+        </property>
+        <property name="beanNames">
+            <list>
+                <!-- 配置需要被拦截的 bean -->
+                <value>accountRestService</value>
+            </list>
+        </property>
+        <!-- 如要使用 CGLIB 代理，取消下面这行的注释 -->
+        <!-- <property name="optimize" value="true" /> -->
+    </bean>
+
+</beans>
