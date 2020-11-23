@@ -96,8 +96,7 @@ Group ID：GID_SHOWCASE
 
 应用部署
 - 管理应用，创建各个应用：account-center, point-center, bff-account
-- 容器应用服务，创建应用进行发布，配置变量，确保给bff-account创建服务，**TODO 需要说明如何发布**
-- 创建网络服务，使用公网SLB
+- 容器应用服务，创建应用进行发布，配置变量，确保给bff-account创建服务并使用公网SLB
 
 变量配置如下：
 ![params](images/params.png)

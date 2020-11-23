@@ -1,5 +1,6 @@
 # 概述
 此DEMO主要是展示一个典型的银行账户场景如何基于SOFA框架和服务来实现
+![arch](images/arch.png)
 
 # 应用说明
 - account-center: 提供账户服务，以RPC-BOLT协议暴露，包括：扣款（TCC），加钱（TCC），查账，结息（每个账户添加1元）
@@ -13,5 +14,4 @@
 - 结息：任务调度通过account-center给每个账户增加1元钱，第一层拆分为分片，第二层拆分为分页，每页的数量可通过自定义参数rangeSize配置
 
 # 部署和使用说明
-
 详细部署步骤请参考：deployment.md
