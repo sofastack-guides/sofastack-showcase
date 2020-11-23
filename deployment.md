@@ -1,8 +1,8 @@
 ## showcase 部署说明
 
 ### 前提条件
-本地开发环境搭建参考：[安装JDK和Maven](https://help.aliyun.com/document_detail/133192.html)
-云环境准备工作参考：1. [开通SOFAStack服务](https://help.aliyun.com/document_detail/137419.html)；2. [工作空间准备](https://help.aliyun.com/document_detail/134381.html) 3. [创建应用元数据](https://help.aliyun.com/document_detail/134384.html?)
+- 本地开发环境搭建参考：[安装JDK和Maven](https://help.aliyun.com/document_detail/133192.html)
+- 云环境准备工作参考：1. [开通SOFAStack服务](https://help.aliyun.com/document_detail/137419.html)；2. [工作空间准备](https://help.aliyun.com/document_detail/134381.html) 3. [创建应用元数据](https://help.aliyun.com/document_detail/134384.html?)
 
 ### 部署步骤
 
@@ -10,7 +10,7 @@
 
 首先创建RDS数据库（注意不要用高版本，ODP不支持），注意确保创建的RDS数据库和SOFA的工作空间在同一个AZ/VPC
 
-- 创建2个RDS数据库，在每个RDS实例的账户管理下，需要创建高级权限用户（ODP 建库需要高权账户），用户名密码可以统一为: db_admin/Passw0rd1
+- 创建2个RDS数据库，在每个RDS实例的账户管理下，需要创建高级权限用户（ODP 建库需要高权账户）
 - 测试登录数据库，激活账号，登录过程中需要设置白名单
 - 修改每个实例的白名单设置，修改default从127.0.0.1为0.0.0.0/0，允许所有IP访问，如果需要可以放开公网IP访问
 
