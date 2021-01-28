@@ -8,21 +8,12 @@
 
     <bean id="accountTransferService" class="com.aliyun.gts.financial.showcases.sofa.inner.AccountTransferServiceImpl" />
 
-    <!-- 泛化调用演示：客户端服务引用声明，接口为固定的com.alipay.sofa.rpc.api.GenericService，实际接口通过global-attrs中设定 -->
+    <!-- 泛化调用：客户端服务引用声明，接口为固定的com.alipay.sofa.rpc.api.GenericService，实际接口通过global-attrs中设定 -->
     <sofa:reference interface="com.alipay.sofa.rpc.api.GenericService" id="pointGenericService">
         <sofa:binding.bolt>
             <sofa:global-attrs generic-interface="com.aliyun.gts.financial.showcases.sofa.facade.api.PointQueryService" />
         </sofa:binding.bolt>
     </sofa:reference>
-
-    <!-- XML配置演示 -->
-    <!-- <sofa:reference id="accountQueryService" interface="com.aliyun.gts.financial.showcases.sofa.facade.api.AccountQueryService">
-        <sofa:binding.bolt>
-            <sofa:global-attrs timeout="6000" address-wait-time="2000" test-url="101.101.0.8:12200" loadBalancer="roundRobin" /> 
-            <sofa:route target-url="172.168.0.8:22000"/>  
-            <sofa:method name="queryAccount" timeout="10000"/> 
-        </sofa:binding.bolt>
-    </sofa:reference> -->
 
     <bean class="com.alipay.sofa.dtx.client.aop.ComponentScanner" />
 

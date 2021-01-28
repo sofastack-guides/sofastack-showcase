@@ -14,6 +14,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alipay.sofa.common.log</groupId>
+                    <artifactId>sofa-middleware-log</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.aliyun.gts.financial.showcases.sofa</groupId>

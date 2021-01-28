@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-// 任务调度演示：任务执行实现
 @Component
 public class BatchSettleExecutor implements IClusterJobExecuteHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSettleExecutor.class);
@@ -68,10 +67,12 @@ public class BatchSettleExecutor implements IClusterJobExecuteHandler {
                 String shard = chunkData.getShardingRule();
 
                 // 在某个范围的数据
-                List<Account> list = accountDAO.getAccountByRange(shard, Integer.valueOf(chunkData.getStart()),
+                List<Account> list = accountDAO.getAccountByRange(shard, 
+                        Integer.valueOf(chunkData.getStart()),
                         Integer.valueOf(chunkData.getEnd()));
 
-                LOGGER.info(String.format("BatchSettleExecutor read data.  chunkId:%s, size=%s", context.getChunkId(),
+                LOGGER.info(String.format("BatchSettleExecutor read data.  chunkId:%s, size=%s", 
+                        context.getChunkId(),
                         list.size()));
                 return new LoadData<Account>(list, false);
             }
@@ -117,10 +118,7 @@ public class BatchSettleExecutor implements IClusterJobExecuteHandler {
                                 JSON.toJSONString(((SingleDataItem<Account>) dataItem).getItem())));
 
                         Account account = ((SingleDataItem<Account>) dataItem).getItem();
-                        Account accountToUpdate = accountDAO.getAccountForUpdate(account.getAccountNo());
-                        BigDecimal newBalance = accountToUpdate.getBalance().add(new BigDecimal(1));
-                        accountToUpdate.setBalance(newBalance);
-                        accountDAO.updateBalance(accountToUpdate);
+                        accountDAO.updateBalance(account);
                         break;
                     case MULTIPLE:
                         LOGGER.info(String.format("getWriter write multi data:%s",

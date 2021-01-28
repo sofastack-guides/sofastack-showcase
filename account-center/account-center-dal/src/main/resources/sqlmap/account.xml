@@ -42,13 +42,11 @@
     </select>
 
 	<insert id="batchInsertAccounts" parameterType="java.util.List" useGeneratedKeys="true">
-		<!-- <selectKey resultType="int" keyProperty="id" order="AFTER">
-			SELECT LAST_INSERT_ID()
-		</selectKey> -->
 		insert into account(account_no,balance,freeze_amount,unreach_amount) values
 		<foreach collection="list" item="model" index="index" separator=","> 
 		   (#{model.accountNo}, #{model.balance}, #{model.freezeAmount}, #{model.unreachAmount})
 		</foreach>
 	 </insert>
-	 
+
+
 </mapper>

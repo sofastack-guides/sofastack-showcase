@@ -2,6 +2,7 @@ package com.aliyun.gts.financial.showcases.sofa.mq;
 
 import java.util.Properties;
 
+import com.alipay.sofa.sofamq.client.LdcSubMode;
 import com.alipay.sofa.sofamq.client.PropertyKeyConst;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -43,8 +44,10 @@ public class MqConfig {
         properties.setProperty(PropertyKeyConst.SECRET_KEY, this.secretKey);
         properties.setProperty(PropertyKeyConst.ENDPOINT, "acvip://" + this.endpoint);
         properties.setProperty(PropertyKeyConst.INSTANCE_ID, this.instanceId);
-        //properties.setProperty(PropertyKeyConst.DATA_CENTER, this.dataCenter);
+        // properties.setProperty(PropertyKeyConst.DATA_CENTER, this.dataCenter);
         properties.setProperty(PropertyKeyConst.GROUP_ID, this.groupId);
+        properties.setProperty(PropertyKeyConst.LDC, "true");
+        properties.setProperty(PropertyKeyConst.LDC_SUB_MODE, LdcSubMode.RZONE.name());
         return properties;
     }
 }

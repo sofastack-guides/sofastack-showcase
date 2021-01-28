@@ -3,24 +3,13 @@
         http://schema.alipay.com/sofa/schema/slite http://schema.alipay.com/sofa/slite.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <bean id="acctDepositFmtService" class="com.aliyun.gts.financial.showcases.sofa.fmt.AcctDepositFmtServiceImpl" />
-
-    <bean id="acctDrawFmtService" class="com.aliyun.gts.financial.showcases.sofa.fmt.AcctDrawFmtServiceImpl" />
-
     <bean id="acctDepositTccService" class="com.aliyun.gts.financial.showcases.sofa.tcc.AcctDepositTccServiceImpl" />
 
     <bean id="acctDrawTccService" class="com.aliyun.gts.financial.showcases.sofa.tcc.AcctDrawTccServiceImpl" />
 
     <bean id="acctQueryService" class="com.aliyun.gts.financial.showcases.sofa.service.AcctQueryServiceImpl" />
 
-    <bean id="acctTransService" class="com.aliyun.gts.financial.showcases.sofa.service.AcctTransServiceImpl" />
-
     <bean id="acctOpenService" class="com.aliyun.gts.financial.showcases.sofa.service.AcctOpenServiceImpl" />
-
-    <!-- RPC演示：配置方式暴露bolt协议的RPC服务 -->
-    <!-- <sofa:service interface="com.aliyun.gts.financial.showcases.sofa.facade.api.AcctTransService" ref="accTransService">
-        <sofa:binding.bolt />
-    </sofa:service> -->
 
     <bean class="com.alipay.sofa.dtx.client.aop.ComponentScanner" />
 

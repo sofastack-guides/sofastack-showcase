@@ -20,11 +20,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>tracer-enterprise-sofa-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alipay.sofa.common.log</groupId>
+                    <artifactId>sofa-middleware-log</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 服务访问控制：规则配置 -->

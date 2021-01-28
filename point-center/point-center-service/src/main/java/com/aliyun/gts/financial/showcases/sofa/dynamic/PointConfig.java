@@ -3,11 +3,10 @@ package com.aliyun.gts.financial.showcases.sofa.dynamic;
 import com.alipay.drm.client.DRMClient;
 import com.alipay.drm.client.api.annotation.DAttribute;
 import com.alipay.drm.client.api.annotation.DObject;
-import com.alipay.drm.client.api.model.DependencyLevel;
 
 import org.springframework.beans.factory.annotation.Value;
 
-// 动态配置演示：1. 定义动态配置类和目标参数
+// 动态配置：1. 定义动态配置类和目标参数
 // 参数值的加载支持多种方式：
 // NONE	  无依赖，启动期不加载服务端值，启动此级别后，客户端仅会接收在运行期间服务端产生的配置推送。
 // ASYNC  异步更新，启动期异步加载服务端值，不关注加载结果。
@@ -17,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 @DObject(region = "showcase", appName = "point-center", id = "com.aliyun.gts.financial.showcases.sofa.dynamic.PointConfig")
 public class PointConfig {
     
-    // @DAttribute(dependency = DependencyLevel.NONE)
+    // @DAttribute(dependency = "NONE")
     @DAttribute
     @Value("${dynamic.point.value}")
     private double pointValue;

@@ -10,7 +10,6 @@ import com.aliyun.gts.financial.showcases.sofa.facade.result.AccountTransResult;
 //@InjvmRemoting
 public interface AcctDepositTccService {
 
-    // DTX演示：TCC模式，加钱接口
     /**
      * <p>
      * 贷记记账接口 TCC模式
@@ -25,7 +24,7 @@ public interface AcctDepositTccService {
      * @return AccountTransResult 交易处理结果
      */
     @TwoPhaseBusinessAction(name = "creditAction", commitMethod = "commit", rollbackMethod = "rollback", antiSuspend = true)
-    public AccountTransResult credit(AccountTransRequest accountTransRequest, @ShardingKey String shardingKey,
+    public AccountTransResult credit(String uid, AccountTransRequest accountTransRequest, @ShardingKey String shardingKey,
             BusinessActionContext businessActionContext);
 
     /**

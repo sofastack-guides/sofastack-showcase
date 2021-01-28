@@ -13,12 +13,11 @@ import com.aliyun.gts.financial.showcases.sofa.template.BizTemplate;
 
 import org.springframework.transaction.TransactionStatus;
 
-// DTX演示：TCC模式，加钱接口实现
 @SofaService(bindings = {@SofaServiceBinding(bindingType = "bolt")})
 public class AcctDepositTccServiceImpl extends AcctAbstractTccService implements AcctDepositTccService {
 
     @Override
-    public AccountTransResult credit(AccountTransRequest accountTransRequest, String shardingKey,
+    public AccountTransResult credit(String uid, AccountTransRequest accountTransRequest, String shardingKey,
                                      BusinessActionContext businessActionContext) {
 
         return BizTemplate.executeWithTransaction(accountTransactionTemplate, new BizCallback() {

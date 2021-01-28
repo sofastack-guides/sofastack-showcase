@@ -104,6 +104,9 @@ process_profile
 RUN_DIR=/home/admin/release/run
 chown -R admin:admin ${RUN_DIR}
 
+# start parms for LDC
+SOFA_JAVA_OPTS="${SOFA_JAVA_OPTS} -Dcom.alipay.ldc.datacenter=${CAFE_ENV_DC_NAME} -Dcom.alipay.ldc.zone=${CAFE_ENV_CELL_NAME} -Dzmode=${CAFE_ENV_ZMODE}"
+
 export APP_JAVA_OPTS="${SOFA_JAVA_OPTS}"
 if [ "${ANTCLOUD_DEPLOY_LEGACY_MODE}" = true ]; then
   echo "Start the application in legacy mode which will start a ssh port 2022."

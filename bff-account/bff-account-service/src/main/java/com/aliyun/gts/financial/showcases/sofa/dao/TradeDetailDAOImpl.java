@@ -1,5 +1,6 @@
 package com.aliyun.gts.financial.showcases.sofa.dao;
 
+import com.aliyun.gts.financial.showcases.sofa.dao.TradeDetailDAO;
 import com.aliyun.gts.financial.showcases.sofa.facade.model.TradeDetail;
 
 import org.mybatis.spring.SqlSessionTemplate;

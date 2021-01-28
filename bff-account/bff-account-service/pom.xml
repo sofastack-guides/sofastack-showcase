@@ -22,11 +22,16 @@
             <version>1.0.0</version>
         </dependency> -->
 
-        <!-- RPC演示：引入RPC依赖starter，同时支持Bolt和REST协议 -->
         <!-- RPC -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alipay.sofa.common.log</groupId>
+                    <artifactId>sofa-middleware-log</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 分布式事务DTX -->
@@ -45,11 +50,6 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>guardian-sofa-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>tracer-enterprise-sofa-boot-starter</artifactId>
         </dependency>
 
         <dependency>

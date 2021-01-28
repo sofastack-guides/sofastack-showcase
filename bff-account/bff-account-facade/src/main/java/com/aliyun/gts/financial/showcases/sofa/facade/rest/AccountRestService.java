@@ -31,8 +31,4 @@ public interface AccountRestService {
     @GET
     @Path("/init/{magicNumber}")
     RestObjResp<Boolean> initAccounts(@PathParam("magicNumber") String magicNumber) throws TradeException;
-
-    @GET
-    @Path("/randomfail")
-    RestObjResp<Integer> randomFail() throws TradeException;
 }

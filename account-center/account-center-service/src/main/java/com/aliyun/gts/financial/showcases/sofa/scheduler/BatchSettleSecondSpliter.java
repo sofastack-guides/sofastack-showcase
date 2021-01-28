@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-// 任务调度演示：第二层拆分
 @Component
 public class BatchSettleSecondSpliter implements IClusterJobSplitHandler<RangeChunkData> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSettleSecondSpliter.class);
@@ -73,7 +72,7 @@ public class BatchSettleSecondSpliter implements IClusterJobSplitHandler<RangeCh
         // /*+DBP: $ROUTE={GROUP_ID(分库位),TABLE_NAME(物理表名)}*/ SQL 语句
         RouteParameters routeParameters = RouteCondition.newRouteParameters();
         routeParameters.setGroupId(shard);
-        routeParameters.setTargetTable("account_" + shard);
+        routeParameters.setTargetTable("account_"+shard);
         int shardSize = accountDAO.getMaxId(shard);
         LOGGER.info("shard {} max id is {}", shard, shardSize);
         return shardSize;

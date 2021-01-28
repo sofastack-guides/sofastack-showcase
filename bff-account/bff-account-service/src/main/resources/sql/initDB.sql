@@ -1,7 +1,4 @@
--- 创建库（拆分数量在界面上设置）
 CREATE DATABASE IF NOT EXISTS trade_db DEFAULT CHARACTER SET = utf8mb4;
-
--- 创建表（拆分数量在界面上设置）
 
 -- 交易表，stream_id是拆分健，取前两位
 CREATE TABLE IF NOT EXISTS `trade_detail`(
@@ -14,8 +11,7 @@ CREATE TABLE IF NOT EXISTS `trade_detail`(
     PRIMARY KEY (stream_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '流水表';
 
--- DBP演示：分布式序列
--- 生成分布式序列的表，sharding_col是隐藏的拆分健，取前两位
+-- 生成分布式序列的表，sharding_col是隐藏的拆分健
 CREATE TABLE `dbp_sequence` (
   `id` INT AUTO_INCREMENT,
   `name` VARCHAR(64),

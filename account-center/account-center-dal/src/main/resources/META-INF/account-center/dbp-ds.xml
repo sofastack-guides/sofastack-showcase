@@ -13,7 +13,6 @@
   </bean>
 
   <bean id="clientTracer" class="com.alipay.sofa.dbp.DbpClientTracer">
-    <!-- 此配置代表只有超过指定耗时阈值的请求才会被记录 -->
     <property name="sampleThreshold" value="0"/>
   </bean>
 

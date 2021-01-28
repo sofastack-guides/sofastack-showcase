@@ -166,7 +166,6 @@ public abstract class AcctAbstractTccService {
     protected void checkBalance(Account account) {
         BigDecimal availableAmount = account.getBalance().subtract(account.getFreezeAmount());
         if (availableAmount.compareTo(BigDecimal.ZERO) < 0) {
-            LOGGER.error("account balance not enough");
             throw new AcctCenterException(CodeEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
         }
     }

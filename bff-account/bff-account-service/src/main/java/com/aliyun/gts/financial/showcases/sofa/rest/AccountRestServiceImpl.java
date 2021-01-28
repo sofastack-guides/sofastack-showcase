@@ -10,7 +10,6 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.aliyun.gts.financial.showcases.sofa.facade.api.AcctOpenService;
 import com.aliyun.gts.financial.showcases.sofa.facade.api.AcctQueryService;
-import com.aliyun.gts.financial.showcases.sofa.facade.api.RandomFailService;
 import com.aliyun.gts.financial.showcases.sofa.facade.bolt.AccountBoltService;
 import com.aliyun.gts.financial.showcases.sofa.facade.exception.TradeException;
 import com.aliyun.gts.financial.showcases.sofa.facade.model.Trade;
@@ -25,22 +24,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-// RPC演示：注解方式暴露REST协议的RPC服务
+// RPC-REST：1. 暴露RPC-REST服务接口
 @SofaService(bindings = { @SofaServiceBinding(bindingType = "rest") })
 public class AccountRestServiceImpl implements AccountRestService {
     private final static Logger LOGGER = LoggerFactory.getLogger(AccountRestServiceImpl.class);
 
-    // RPC演示：注解方式引用BOLT服务接口
+    // RPC-RPC：2. 引用RPC-BOLT服务接口
     @SofaReference(interfaceType = AcctQueryService.class, binding = @SofaReferenceBinding(bindingType = "bolt"))
     AcctQueryService acctQueryService;
 
-    @SofaReference(interfaceType = AcctOpenService.class, binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 30000))
+    @SofaReference(interfaceType = AcctOpenService.class, binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 10000))
     AcctOpenService acctOpenService;
 
-    @SofaReference(interfaceType = RandomFailService.class, binding = @SofaReferenceBinding(bindingType = "bolt"))
-    RandomFailService randomFailService;
-
-    // RPC演示：泛化调用
+    // RPC泛化调用演示
     @Autowired
     GenericService pointGenericService;
 
@@ -79,7 +75,7 @@ public class AccountRestServiceImpl implements AccountRestService {
 
         AccountTransResult accountTransResult = null;
         try {
-            accountTransResult = accountBoltService.transerTrade(dtxType, accountTransRequest);
+            accountTransResult = accountBoltService.transerTrade(accountTransRequest);
         } catch (Exception e) {
             LOGGER.error("transfer trade failed: {}", e.getMessage(), e);
             accountTransResult = AccountTransResult.failedResultOf("TRADE_FAIL", "transfer trade failed");
@@ -99,7 +95,7 @@ public class AccountRestServiceImpl implements AccountRestService {
 
         try {
             LOGGER.info("get point via rpc-generic for account: [{}]", accountNo);
-            // RPC演示：泛化调用，通过$inovke来调用具体的方法，并传入参数
+            // RPC泛化调用：通过$inovke来调用具体的方法，并传入参数
             double point = (double) pointGenericService.$invoke("getPoint", new String[] { String.class.getName() },
                     new Object[] { accountNo });
 
@@ -136,27 +132,6 @@ public class AccountRestServiceImpl implements AccountRestService {
         return response;
     }
 
-    @Override
-    public RestObjResp<Integer> randomFail() throws TradeException {
-        RestObjResp<Integer> response = new RestObjResp<Integer>();
-
-        try {
-            LOGGER.info("random fail testing...");
-            // RPC演示：泛化调用，通过$inovke来调用具体的方法，并传入参数
-            int result = randomFailService.run();
-
-            response.setSuccess(true);
-            response.setData(result);
-            response.setResultMsg("SUCCESS");
-        } catch (Exception e) {
-            LOGGER.error("random fail {}", e.getMessage(), e);
-            response.setSuccess(false);
-            response.setResultMsg(e.getMessage());
-        }
-
-        return response;
-    }
-
     private AccountTransRequest convert(TransferTradeRequest transferTradeRequest) {
         AccountTransRequest accountTransRequest = new AccountTransRequest();
         accountTransRequest.setBacc(transferTradeRequest.getFromAccountNo());
@@ -165,7 +140,5 @@ public class AccountRestServiceImpl implements AccountRestService {
         accountTransRequest.setTxnTime(new Date());
         return accountTransRequest;
     }
-
-    
 
 }

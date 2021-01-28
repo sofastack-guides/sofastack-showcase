@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
-import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
 import com.aliyun.gts.financial.showcases.sofa.dao.AccountDAO;
 import com.aliyun.gts.financial.showcases.sofa.facade.api.AcctOpenService;
 import com.aliyun.gts.financial.showcases.sofa.facade.model.Account;
@@ -19,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SofaService(bindings = {@SofaServiceBinding(bindingType = "bolt")})
+@SofaService(bindings = { @SofaServiceBinding(bindingType = "bolt") })
 public class AcctOpenServiceImpl implements AcctOpenService {
     private final static Logger LOGGER = LoggerFactory.getLogger(AcctOpenServiceImpl.class);
 
@@ -27,7 +26,6 @@ public class AcctOpenServiceImpl implements AcctOpenService {
     private AccountDAO accountDAO;
 
     @Override
-    @Tracer
     public Boolean initAccounts(String magicNumber) {
         validateMagicNumber(magicNumber);
 
@@ -37,7 +35,7 @@ public class AcctOpenServiceImpl implements AcctOpenService {
 
         // 初始化一万条数据，格式为：00~99 + magicNumber + 00~99
         for (int i = 0; i < workerCount; i++) {
-            int start = i * 10;
+            int start = i*10;
             int end = start + 9;
             threadPool.execute(() -> {
                 try {
@@ -82,7 +80,7 @@ public class AcctOpenServiceImpl implements AcctOpenService {
             throw new RuntimeException("Magic number must be numbers only!");
         }
 
-        Account account = accountDAO.getAccount("00" + magicNumber + "00");
+        Account account = accountDAO.getAccount("00"+magicNumber+"00");
         if (null != account) {
             throw new RuntimeException("Magic number has existed already!");
         }

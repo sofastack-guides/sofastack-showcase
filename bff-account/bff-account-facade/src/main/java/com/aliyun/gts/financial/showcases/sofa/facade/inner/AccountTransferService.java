@@ -18,5 +18,5 @@ public interface AccountTransferService {
      * @param accountTransRequest   转账请求
      * @return 转账结果
      */
-    AccountTransResult transerByTcc(AccountTransRequest accountTransRequest);
+    AccountTransResult transerByTcc(AccountTransRequest accountTransRequest, String streamId);
 }

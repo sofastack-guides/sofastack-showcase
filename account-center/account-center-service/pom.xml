@@ -20,32 +20,33 @@
             <artifactId>account-center-dal</artifactId>
         </dependency>
 
-        <!-- RPC演示：引入RPC依赖通过starter -->
         <!-- sofa rpc dependency -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-enterprise-sofa-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alipay.sofa.common.log</groupId>
+                    <artifactId>sofa-middleware-log</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- DRM演示：引入DRM依赖通过starter -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>ddcs-enterprise-sofa-boot-starter</artifactId>
         </dependency>
 
-        <!-- 限流演示：引入限流依赖通过starter -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>guardian-sofa-boot-starter</artifactId>
         </dependency>
 
-        <!-- 任务调度演示：引入任务调度依赖通过starter -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>scheduler-enterprise-sofa-boot-starter</artifactId>
         </dependency>
 
-        <!-- 链路追踪演示：引入链路追踪依赖通过starter -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>tracer-enterprise-sofa-boot-starter</artifactId>
@@ -84,6 +85,7 @@
         </dependency>
         <!-- spring dependencies end -->
 
+    
     </dependencies>
 
     <build>

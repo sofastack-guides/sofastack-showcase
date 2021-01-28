@@ -26,7 +26,6 @@ public class BizTemplate {
             BizCallback callback) {
 
         AccountTransResult accountTransResult = new AccountTransResult();
-        // Tracer演示：工具类TracerContextUtil
         String traceId = TracerContextUtil.getTraceId();
         accountTransResult.setTransLogId(traceId);
         try {

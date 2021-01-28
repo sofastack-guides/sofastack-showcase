@@ -3,6 +3,7 @@ package com.aliyun.gts.financial.showcases.sofa.bolt;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.sofamq.client.TransactionHelper;
+import com.alipay.sofa.sofamq.client.UserPropKey;
 import com.aliyun.gts.financial.showcases.sofa.dao.TradeDetailDAO;
 import com.aliyun.gts.financial.showcases.sofa.facade.bolt.AccountBoltService;
 import com.aliyun.gts.financial.showcases.sofa.facade.enums.StatusEnum;
@@ -11,6 +12,7 @@ import com.aliyun.gts.financial.showcases.sofa.facade.model.TradeDetail;
 import com.aliyun.gts.financial.showcases.sofa.facade.request.AccountTransRequest;
 import com.aliyun.gts.financial.showcases.sofa.facade.result.AccountTransResult;
 import com.aliyun.gts.financial.showcases.sofa.mq.MqConfig;
+import com.aliyun.gts.financial.showcases.sofa.utils.UIDUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +47,11 @@ public class AccountBoltServiceImpl implements AccountBoltService {
     @Autowired
     private TransactionTemplate bffTransactionTemplate;
 
-    // DTX演示：嵌套事务型消息
+    // DTX：嵌套TCC
     @Override
-    public AccountTransResult transerTrade(String dtxType, AccountTransRequest accountTransRequest) {
+    public AccountTransResult transerTrade(AccountTransRequest accountTransRequest) {
 
-        LOGGER.info("dtx type: {}", dtxType);
+        LOGGER.info("transer trade starts ......");
         AccountTransResult accountTransResult = null;
 
         try {
@@ -85,13 +87,15 @@ public class AccountBoltServiceImpl implements AccountBoltService {
             @Override
             public AccountTransResult doInTransaction(TransactionStatus status) {
                 try {
+                    
                     // 1. 发送积分事务消息，但不触发投递
                     Message message = new Message(mqConfig.getTopic(), mqConfig.getTag(),
                             accountTransRequest.getBacc().getBytes());
                     // message.setSystemProperties("systemProperties");
                     message.setKey(streamId);
                     // 单元化: 根据uid发送消息给具体的RZone
-                    // message.putUserProperties(UserPropKey.CELL_UID, "01");
+                    String fromUid = UIDUtil.extractUidFromAccountNo(accountTransRequest.getBacc());
+                    message.putUserProperties(UserPropKey.CELL_UID, fromUid);
 
                     TransactionalResult msgPubResult = transactionProducer.prepare(message);
                     // 将事务型消息与本地事务绑定：
@@ -99,8 +103,8 @@ public class AccountBoltServiceImpl implements AccountBoltService {
                     // 当前本地事务失败，则自动触发 msgPubResult.rollback();
                     TransactionHelper.synchronizeSpringTransaction(msgPubResult);
 
-                    // 2. 转账，嵌套TCC
-                    return accountTransferService.transerByTcc(accountTransRequest);
+                    // 2. 转账，TCC
+                    return accountTransferService.transerByTcc(accountTransRequest, streamId);
                 } catch (Exception e) {
                     status.setRollbackOnly();
                     return new AccountTransResult(false, "nested tcc failed", e.getMessage());
@@ -123,7 +127,7 @@ public class AccountBoltServiceImpl implements AccountBoltService {
             public io.openmessaging.api.transaction.TransactionStatus execute(Message message, Object arg) {
                 try {
                     // 2. 转账，嵌套TCC
-                    AccountTransResult result = accountTransferService.transerByTcc(accountTransRequest);
+                    AccountTransResult result = accountTransferService.transerByTcc(accountTransRequest, streamId);
                     return result.isSuccess() ? io.openmessaging.api.transaction.TransactionStatus.CommitTransaction
                             : io.openmessaging.api.transaction.TransactionStatus.RollbackTransaction;
                 } catch (Exception e) {
@@ -141,7 +145,7 @@ public class AccountBoltServiceImpl implements AccountBoltService {
 
     private String generateStreamId(AccountTransRequest accountTransRequest) {
         int sequenceId = tradeDetailDAO.getSequenceId(accountTransRequest.getBacc());
-        String uid = accountTransRequest.getBacc().substring(0, 2);
+        String uid = UIDUtil.extractUidFromAccountNo(accountTransRequest.getBacc());
         String streamId = uid + sequenceId;
         return streamId;
     }
@@ -159,7 +163,7 @@ public class AccountBoltServiceImpl implements AccountBoltService {
         tradeDetailDAO.addTradeDetail(tradeDetail);
     }
 
- private void finishTrade(String streamId) {
+    private void finishTrade(String streamId) {
         int updateNum = this.updateTradeStatus(streamId, StatusEnum.DONE);
         if (updateNum == 0) {
             throw new RuntimeException(String.format("set deal success exception,streamId:%s", streamId));
